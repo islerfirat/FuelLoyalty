@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+	<!-- Class library olduğu halde ASP.NET Core tiplerini (IResult, WebApplication...) kullanabilmek için -->
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+	  <PackageReference Include="MassTransit.RabbitMQ" Version="8.5.10" />
+	</ItemGroup>
+
+	<ItemGroup>
+    <ProjectReference Include="..\FuelLoyalty.SharedKernel\FuelLoyalty.SharedKernel.csproj" />
+  </ItemGroup>
+
+</Project>

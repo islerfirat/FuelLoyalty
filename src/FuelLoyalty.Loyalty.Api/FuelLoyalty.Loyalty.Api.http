@@ -1,0 +1,40 @@
+@FuelLoyalty.Loyalty.Api_HostAddress = http://localhost:5122
+
+### 1) Benzin kartý, Benzin -> ONAY, en fazla 5000 TL
+POST {{FuelLoyalty.Loyalty.Api_HostAddress}}/cards/authorize
+Content-Type: application/json
+
+{ "cardNumber": "1000200030004000", "fuelType": "Benzin", "stationCode": "IST-001", "pumpNo": 1 }
+
+### 2) Ayný kart tekrar (baþka pompa) -> RET: Kullanýlabilir bakiye yok
+POST {{FuelLoyalty.Loyalty.Api_HostAddress}}/cards/authorize
+Content-Type: application/json
+
+{ "cardNumber": "1000200030004000", "fuelType": "Benzin", "stationCode": "IST-001", "pumpNo": 2 }
+
+### 3) Litre limitli Motorin kartý -> ONAY, en fazla 200 Litre
+POST {{FuelLoyalty.Loyalty.Api_HostAddress}}/cards/authorize
+Content-Type: application/json
+
+{ "cardNumber": "1000200030004001", "fuelType": "Motorin", "stationCode": "IST-001", "pumpNo": 3 }
+
+### 4) Motorin kartý ile Benzin -> RET: yakýt tipi uyuþmuyor
+POST {{FuelLoyalty.Loyalty.Api_HostAddress}}/cards/authorize
+Content-Type: application/json
+
+{ "cardNumber": "1000200030004001", "fuelType": "Benzin", "stationCode": "IST-001", "pumpNo": 3 }
+
+### 5) Pasif kart -> RET
+POST {{FuelLoyalty.Loyalty.Api_HostAddress}}/cards/authorize
+Content-Type: application/json
+
+{ "cardNumber": "1000200030004002", "fuelType": "Benzin", "stationCode": "IST-001", "pumpNo": 1 }
+
+### 6) Olmayan kart -> RET
+POST {{FuelLoyalty.Loyalty.Api_HostAddress}}/cards/authorize
+Content-Type: application/json
+
+{ "cardNumber": "9999", "fuelType": "Benzin", "stationCode": "IST-001", "pumpNo": 1 }
+
+### 7) Kart durumu (bloke miktarýný gör)
+GET {{FuelLoyalty.Loyalty.Api_HostAddress}}/cards/1000200030004000

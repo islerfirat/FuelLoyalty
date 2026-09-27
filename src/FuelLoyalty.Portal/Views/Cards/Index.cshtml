@@ -1,0 +1,141 @@
+﻿@model CardListViewModel
+@{
+    ViewData["Title"] = "Kartlar";
+    ViewData["Subtitle"] = "Yakıt kartlarını görüntüleyin, arayın ve yönetin";
+}
+
+@section PageActions {
+    <a class="btn btn-primary" asp-action="Create">
+        <i class="bi bi-plus-lg me-1"></i> Yeni Kart
+    </a>
+}
+
+@if (Model.Error is not null)
+{
+    <partial name="_ErrorAlert" model="Model.Error" />
+}
+
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon blue"><i class="bi bi-credit-card-2-front"></i></div>
+            <div>
+                <div class="stat-label">Toplam Kart</div>
+                <div class="stat-value">@Model.Cards.Count</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon green"><i class="bi bi-check-circle"></i></div>
+            <div>
+                <div class="stat-label">Aktif</div>
+                <div class="stat-value">@Model.ActiveCount</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon slate"><i class="bi bi-slash-circle"></i></div>
+            <div>
+                <div class="stat-label">Pasif</div>
+                <div class="stat-value">@Model.PassiveCount</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon amber"><i class="bi bi-fuel-pump"></i></div>
+            <div>
+                <div class="stat-label">Pompada İşlemde</div>
+                <div class="stat-value">@Model.InProgressCount</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="app-panel">
+    <div class="app-panel-header">
+        <form method="get" asp-action="Index" class="d-flex gap-2 flex-grow-1" style="max-width: 520px;">
+            <div class="input-group">
+                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                <input type="text" name="search" value="@Model.Search" class="form-control" placeholder="Kart no veya plaka ile ara" />
+            </div>
+            <button type="submit" class="btn btn-outline-secondary">Ara</button>
+            @if (!string.IsNullOrWhiteSpace(Model.Search))
+            {
+                <a class="btn btn-link text-decoration-none" asp-action="Index">Temizle</a>
+            }
+        </form>
+        <span class="text-muted small">@Model.Cards.Count kayıt</span>
+    </div>
+
+    @if (Model.Cards.Count == 0)
+    {
+        @if (Model.Error is null)
+        {
+            <div class="empty-state">
+                <i class="bi bi-inbox"></i>
+                Kayıt bulunamadı.
+            </div>
+        }
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-app">
+                <thead>
+                    <tr>
+                        <th>Kart No</th>
+                        <th>Sahibi / Plaka</th>
+                        <th>Yakıt</th>
+                        <th>Limit Türü</th>
+                        <th class="text-end">Bakiye</th>
+                        <th class="text-end">Bloke</th>
+                        <th class="text-end">Kullanılabilir</th>
+                        <th>Durum</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var card in Model.Cards)
+                    {
+                        var unit = card.LimitType.ToUnit();
+
+                        <tr>
+                            <td class="font-mono">@card.CardNumber</td>
+                            <td class="fw-medium">@card.HolderName</td>
+                            <td>@card.AllowedFuelType</td>
+                            <td class="text-muted">@card.LimitType.ToDisplayName()</td>
+                            <td class="text-end">@card.Balance.ToString("N2") <small class="text-muted">@unit</small></td>
+                            <td class="text-end">@card.ReservedBalance.ToString("N2") <small class="text-muted">@unit</small></td>
+                            <td class="text-end fw-semibold">@card.AvailableBalance.ToString("N2") <small class="text-muted">@unit</small></td>
+                            <td>
+                                <div class="d-flex gap-1 flex-wrap">
+                                    @if (card.IsActive)
+                                    {
+                                        <span class="badge-soft success">Aktif</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge-soft muted">Pasif</span>
+                                    }
+
+                                    @if (card.ReservedBalance > 0)
+                                    {
+                                        <span class="badge-soft warning">İşlemde</span>
+                                    }
+                                </div>
+                            </td>
+                            <td class="text-end">
+                                <a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@card.CardNumber">
+                                    Detay <i class="bi bi-chevron-right"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

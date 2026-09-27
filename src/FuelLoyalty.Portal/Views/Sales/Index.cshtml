@@ -1,0 +1,206 @@
+﻿@model SalesReportViewModel
+@{
+    ViewData["Title"] = "Satış Raporu";
+    ViewData["Subtitle"] = "Satışları tarih, istasyon, kart ve yakıt tipine göre inceleyin";
+    var report = Model.Report;
+}
+
+@if (Model.Error is not null)
+{
+    <partial name="_ErrorAlert" model="Model.Error" />
+}
+
+<!-- Filtreler -->
+<div class="app-panel mb-4">
+    <div class="app-panel-body">
+        <form method="get" asp-action="Index" novalidate>
+            <div class="row g-3 align-items-end">
+                <div class="col-sm-6 col-lg-2">
+                    <label asp-for="Filter.From" class="form-label"></label>
+                    <input asp-for="Filter.From" type="date" class="form-control" />
+                    <span asp-validation-for="Filter.From" class="text-danger small"></span>
+                </div>
+                <div class="col-sm-6 col-lg-2">
+                    <label asp-for="Filter.To" class="form-label"></label>
+                    <input asp-for="Filter.To" type="date" class="form-control" />
+                    <span asp-validation-for="Filter.To" class="text-danger small"></span>
+                </div>
+                <div class="col-sm-6 col-lg-2">
+                    <label asp-for="Filter.StationCode" class="form-label"></label>
+                    <input asp-for="Filter.StationCode" class="form-control" placeholder="IST-001" />
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <label asp-for="Filter.CardNumber" class="form-label"></label>
+                    <input asp-for="Filter.CardNumber" class="form-control font-mono" inputmode="numeric" />
+                </div>
+                <div class="col-sm-6 col-lg-2">
+                    <label asp-for="Filter.FuelType" class="form-label"></label>
+                    <select asp-for="Filter.FuelType" asp-items="SelectListFactory.FuelTypes()" class="form-select">
+                        <option value="">Tümü</option>
+                    </select>
+                </div>
+                <div class="col-sm-6 col-lg-1 d-grid">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-funnel"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap align-items-center gap-2 mt-3">
+                <span class="text-muted small me-1">Hızlı seçim:</span>
+                @foreach (var range in Model.QuickRanges)
+                {
+                    <a class="btn btn-sm @(range.Matches(Model.Filter) ? "btn-primary" : "btn-outline-secondary")"
+                       asp-action="Index" asp-all-route-data="range.RouteValues">@range.Label</a>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (report is not null)
+{
+    <!-- Özet -->
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="stat-card">
+                <div class="stat-icon blue"><i class="bi bi-receipt"></i></div>
+                <div>
+                    <div class="stat-label">Satış Adedi</div>
+                    <div class="stat-value">@report.TotalCount.ToString("N0")</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="stat-card">
+                <div class="stat-icon green"><i class="bi bi-droplet-half"></i></div>
+                <div>
+                    <div class="stat-label">Toplam Litre</div>
+                    <div class="stat-value">@report.TotalLiters.ToString("N2") <small class="fs-6 text-muted">L</small></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="stat-card">
+                <div class="stat-icon amber"><i class="bi bi-cash-stack"></i></div>
+                <div>
+                    <div class="stat-label">Toplam Tutar</div>
+                    <div class="stat-value">@report.TotalAmount.ToString("N2") <small class="fs-6 text-muted">TL</small></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="stat-card">
+                <div class="stat-icon slate"><i class="bi bi-calculator"></i></div>
+                <div>
+                    <div class="stat-label">Ortalama Satış</div>
+                    <div class="stat-value">@Model.AverageAmount.ToString("N2") <small class="fs-6 text-muted">TL</small></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <!-- Yakıt tipine göre dağılım -->
+        <div class="col-xl-4">
+            <div class="app-panel h-100">
+                <div class="app-panel-header">
+                    <h6 class="mb-0 fw-semibold">Yakıt Tipine Göre</h6>
+                </div>
+                <div class="app-panel-body">
+                    @if (report.ByFuelType.Count == 0)
+                    {
+                        <p class="text-muted mb-0">Bu filtreye uyan satış yok.</p>
+                    }
+                    else
+                    {
+                        @foreach (var summary in report.ByFuelType)
+                        {
+                            var share = Model.ShareOf(summary);
+
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="fw-semibold">
+                                        <span class="fuel-dot @summary.FuelType.ToCssClass()"></span>
+                                        @summary.FuelType
+                                    </span>
+                                    <span class="fw-semibold">%@share.ToString("N1")</span>
+                                </div>
+                                <div class="progress progress-thin mb-1">
+                                    <div class="progress-bar @summary.FuelType.ToCssClass()"
+                                         style="width: @share.ToString("0.##", CultureInfo.InvariantCulture)%"></div>
+                                </div>
+                                <div class="text-muted small">
+                                    @summary.Count.ToString("N0") satış · @summary.TotalLiters.ToString("N2") L · @summary.TotalAmount.ToString("N2") TL
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Satışlar -->
+        <div class="col-xl-8">
+            <div class="app-panel h-100">
+                <div class="app-panel-header">
+                    <h6 class="mb-0 fw-semibold">Satışlar</h6>
+                    <span class="text-muted small">@report.Sales.Count kayıt</span>
+                </div>
+
+                @if (Model.IsTruncated)
+                {
+                    <div class="alert alert-info rounded-0 border-0 border-bottom mb-0 small">
+                        <i class="bi bi-info-circle me-1"></i>
+                        Filtreye uyan @report.TotalCount.ToString("N0") satışın en yeni @report.Sales.Count tanesi listeleniyor.
+                        Özet ve dağılım tüm satışları kapsar.
+                    </div>
+                }
+
+                @if (report.Sales.Count == 0)
+                {
+                    <div class="empty-state">
+                        <i class="bi bi-inbox"></i>
+                        Bu filtreye uyan satış bulunamadı.
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-app">
+                            <thead>
+                                <tr>
+                                    <th>Tarih</th>
+                                    <th>İstasyon</th>
+                                    <th>Kart No</th>
+                                    <th>Yakıt</th>
+                                    <th class="text-end">Litre</th>
+                                    <th class="text-end">Tutar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var sale in report.Sales)
+                                {
+                                    <tr>
+                                        <td class="text-nowrap">@BusinessTime.ToLocal(sale.SoldAt).ToString("dd.MM.yyyy HH:mm")</td>
+                                        <td>@sale.StationCode</td>
+                                        <td>
+                                            <a class="font-mono text-decoration-none"
+                                               asp-controller="Cards" asp-action="Details" asp-route-id="@sale.CardNumber">@sale.CardNumber</a>
+                                        </td>
+                                        <td>
+                                            <span class="fuel-dot @sale.FuelType.ToCssClass()"></span>
+                                            @sale.FuelType
+                                        </td>
+                                        <td class="text-end">@sale.Liters.ToString("N2")</td>
+                                        <td class="text-end fw-semibold">@sale.Amount.ToString("N2") <small class="text-muted">TL</small></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}

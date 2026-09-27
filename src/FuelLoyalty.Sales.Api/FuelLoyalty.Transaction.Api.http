@@ -1,0 +1,43 @@
+@FuelLoyalty.Sales.Api_HostAddress = http://localhost:5023
+
+# 1. ve 3. isteðin cevabýndaki authorizationId deðerlerini buraya yapýþtýr
+@authBenzinId = 9f835f04-7cf0-434e-8d6b-a43c428b908f
+@authMotorinId = 57a12a04-e923-47ed-b010-1a59b4a812dd
+
+### 1) Kart okutuldu: TL limitli Benzin kartý
+POST {{FuelLoyalty.Sales.Api_HostAddress}}/authorizations
+Content-Type: application/json
+
+{ "cardNumber": "1000200030004000", "fuelType": "Benzin", "stationCode": "IST-001", "pumpNo": 1 }
+
+### 2) Satýþ bitti: 40.5 L, 2150.75 TL -> bakiyeden 2150.75 TL düþülmeli
+POST {{FuelLoyalty.Sales.Api_HostAddress}}/sales
+Content-Type: application/json
+
+{
+  "authorizationId": "{{authBenzinId}}",
+  "stationCode": "IST-001",
+  "cardNumber": "1000200030004000",
+  "fuelType": "Benzin",
+  "liters": 40.5,
+  "amount": 2150.75
+}
+
+### 3) Kart okutuldu: Litre limitli Motorin kartý
+POST {{FuelLoyalty.Sales.Api_HostAddress}}/authorizations
+Content-Type: application/json
+
+{ "cardNumber": "1000200030004001", "fuelType": "Motorin", "stationCode": "IST-001", "pumpNo": 2 }
+
+### 4) Satýþ bitti: 50 L, 2400 TL -> bakiyeden 50 LÝTRE düþülmeli
+POST {{FuelLoyalty.Sales.Api_HostAddress}}/sales
+Content-Type: application/json
+
+{
+  "authorizationId": "{{authMotorinId}}",
+  "stationCode": "IST-001",
+  "cardNumber": "1000200030004001",
+  "fuelType": "Motorin",
+  "liters": 50,
+  "amount": 2400
+}

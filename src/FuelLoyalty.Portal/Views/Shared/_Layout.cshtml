@@ -1,0 +1,74 @@
+﻿@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    string NavClass(string controller) => currentController == controller ? "app-nav-link active" : "app-nav-link";
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] · FuelLoyalty Portal</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="app-shell">
+
+        <aside class="app-sidebar">
+            <a class="app-brand" asp-controller="Home" asp-action="Index">
+                <i class="bi bi-fuel-pump-fill"></i>
+                <span>FuelLoyalty</span>
+            </a>
+
+            <nav class="app-nav">
+                <div class="app-nav-section">Genel</div>
+                <a class="@NavClass("Home")" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-grid-1x2"></i> Genel Bakış
+                </a>
+
+                <div class="app-nav-section">Yönetim</div>
+                <a class="@NavClass("Cards")" asp-controller="Cards" asp-action="Index">
+                    <i class="bi bi-credit-card-2-front"></i> Kartlar
+                </a>
+
+                <div class="app-nav-section">Raporlar</div>
+                <a class="@NavClass("Sales")" asp-controller="Sales" asp-action="Index">
+                    <i class="bi bi-bar-chart-line"></i> Satış Raporu
+                </a>
+            </nav>
+
+            <div class="app-sidebar-footer">FuelLoyalty Portal · v1.0</div>
+        </aside>
+
+        <div class="app-main">
+            <header class="app-topbar">
+                <div>
+                    <h1 class="app-page-title">@ViewData["Title"]</h1>
+                    @if (ViewData["Subtitle"] is string subtitle)
+                    {
+                        <p class="app-page-subtitle">@subtitle</p>
+                    }
+                </div>
+                <div class="d-flex gap-2">
+                    @await RenderSectionAsync("PageActions", required: false)
+                </div>
+            </header>
+
+            <main class="app-content">
+                <partial name="_StatusMessages" />
+                @RenderBody()
+            </main>
+        </div>
+
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

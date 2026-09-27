@@ -1,0 +1,155 @@
+﻿@model CardDetailsViewModel
+@{
+    var card = Model.Card;
+    var unit = card?.LimitType.ToUnit() ?? string.Empty;
+
+    ViewData["Title"] = card?.HolderName ?? "Kart Detayı";
+    ViewData["Subtitle"] = $"Kart No: {Model.CardNumber}";
+}
+
+@section PageActions {
+    <a class="btn btn-outline-secondary" asp-action="Index">
+        <i class="bi bi-arrow-left me-1"></i> Kartlara dön
+    </a>
+}
+
+@if (Model.Error is not null)
+{
+    <partial name="_ErrorAlert" model="Model.Error" />
+}
+
+@if (card is not null)
+{
+    <!-- Bakiye özeti -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon blue"><i class="bi bi-wallet2"></i></div>
+                <div>
+                    <div class="stat-label">Bakiye</div>
+                    <div class="stat-value">@card.Balance.ToString("N2") <small class="fs-6 text-muted">@unit</small></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon amber"><i class="bi bi-lock"></i></div>
+                <div>
+                    <div class="stat-label">Bloke</div>
+                    <div class="stat-value">@card.ReservedBalance.ToString("N2") <small class="fs-6 text-muted">@unit</small></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon green"><i class="bi bi-check2-circle"></i></div>
+                <div>
+                    <div class="stat-label">Kullanılabilir</div>
+                    <div class="stat-value">@card.AvailableBalance.ToString("N2") <small class="fs-6 text-muted">@unit</small></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <!-- Kart bilgileri -->
+        <div class="col-lg-5">
+            <div class="app-panel h-100">
+                <div class="app-panel-header">
+                    <h6 class="mb-0 fw-semibold">Kart Bilgileri</h6>
+                    @if (card.IsActive)
+                    {
+                        <span class="badge-soft success">Aktif</span>
+                    }
+                    else
+                    {
+                        <span class="badge-soft muted">Pasif</span>
+                    }
+                </div>
+                <div class="app-panel-body">
+                    <dl class="info-list">
+                        <dt>Kart numarası</dt>
+                        <dd class="font-mono">@card.CardNumber</dd>
+
+                        <dt>Kart sahibi / plaka</dt>
+                        <dd>@card.HolderName</dd>
+
+                        <dt>İzinli yakıt</dt>
+                        <dd>@card.AllowedFuelType</dd>
+
+                        <dt>Limit türü</dt>
+                        <dd>@card.LimitType.ToDisplayName()</dd>
+                    </dl>
+
+                    <hr />
+
+                    <form asp-action="UpdateStatus" asp-route-id="@card.CardNumber" method="post"
+                          onsubmit="return confirm('@(card.IsActive ? "Kart pasif edilecek. Emin misiniz?" : "Kart aktif edilecek. Emin misiniz?")');">
+                        <input type="hidden" name="isActive" value="@(card.IsActive ? "false" : "true")" />
+                        @if (card.IsActive)
+                        {
+                            <button type="submit" class="btn btn-outline-danger w-100">
+                                <i class="bi bi-slash-circle me-1"></i> Kartı pasif et
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-outline-success w-100">
+                                <i class="bi bi-check-circle me-1"></i> Kartı aktif et
+                            </button>
+                        }
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Limit belirleme -->
+        <div class="col-lg-7">
+            <div class="app-panel h-100">
+                <div class="app-panel-header">
+                    <h6 class="mb-0 fw-semibold">Limit Belirle</h6>
+                </div>
+                <div class="app-panel-body">
+                    @if (Model.HasActiveReservation)
+                    {
+                        <div class="alert alert-warning d-flex gap-2">
+                            <i class="bi bi-fuel-pump"></i>
+                            <span>Kartta pompada devam eden bir işlem var. İşlem tamamlanınca ya da provizyon süresi dolunca limit değiştirilebilir.</span>
+                        </div>
+                    }
+
+                    <form asp-action="UpdateLimit" asp-route-id="@card.CardNumber" method="post" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <fieldset disabled="@Model.HasActiveReservation">
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label asp-for="LimitForm.LimitType" class="form-label"></label>
+                                    <select asp-for="LimitForm.LimitType" asp-items="SelectListFactory.LimitTypes()" class="form-select"></select>
+                                    <span asp-validation-for="LimitForm.LimitType" class="text-danger small"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="LimitForm.Balance" class="form-label"></label>
+                                    <input asp-for="LimitForm.Balance" type="text" inputmode="decimal" class="form-control" />
+                                    <span asp-validation-for="LimitForm.Balance" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-text mb-3">
+                                Kartın bakiyesi girilen değere ayarlanır. Limit türü değişirse bakiye yeni birimde (TL veya litre) yorumlanır.
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save me-1"></i> Limiti Kaydet
+                            </button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <a class="btn btn-outline-secondary" asp-action="Index">Kart listesine dön</a>
+}

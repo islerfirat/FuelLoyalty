@@ -1,0 +1,122 @@
+﻿services:
+  postgres:
+    image: postgres:16
+    container_name: fuelloyalty-postgres
+    environment:
+      POSTGRES_USER: loyalty
+      POSTGRES_PASSWORD: loyalty123
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U loyalty"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: fuelloyalty-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: fuelloyalty-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+
+  loyalty-api:
+    build:
+      context: .
+      dockerfile: src/FuelLoyalty.Loyalty.Api/Dockerfile
+    container_name: fuelloyalty-loyalty-api
+    environment:
+      ConnectionStrings__LoyaltyDb: "Host=postgres;Port=5432;Database=loyalty_db;Username=loyalty;Password=loyalty123"
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Username: guest
+      RabbitMq__Password: guest
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    restart: on-failure
+
+  sales-api:
+    build:
+      context: .
+      dockerfile: src/FuelLoyalty.Sales.Api/Dockerfile
+    container_name: fuelloyalty-sales-api
+    environment:
+      ConnectionStrings__SalesDb: "Host=postgres;Port=5432;Database=sales_db;Username=loyalty;Password=loyalty123"
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Username: guest
+      RabbitMq__Password: guest
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    restart: on-failure
+
+  gateway:
+    build:
+      context: .
+      dockerfile: src/FuelLoyalty.Gateway/Dockerfile
+    container_name: fuelloyalty-gateway
+    environment:
+      ReverseProxy__Clusters__sales-cluster__Destinations__sales-1__Address: "http://sales-api:8080"
+      ReverseProxy__Clusters__loyalty-cluster__Destinations__loyalty-1__Address: "http://loyalty-api:8080"
+    ports:
+      - "5000:8080"
+    depends_on:
+      sales-api:
+        condition: service_healthy
+      loyalty-api:
+        condition: service_healthy
+    restart: on-failure
+
+  portal:
+    build:
+      context: .
+      dockerfile: src/FuelLoyalty.Portal/Dockerfile
+    container_name: fuelloyalty-portal
+    environment:
+      Gateway__BaseUrl: "http://gateway:8080"
+      DataProtection__KeysPath: "/app/keys"
+    volumes:
+      - portal-keys:/app/keys
+    ports:
+      - "5100:8080"
+    depends_on:
+      - gateway
+    restart: on-failure
+
+volumes:
+  pgdata:
+  portal-keys:

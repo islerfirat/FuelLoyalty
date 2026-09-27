@@ -1,0 +1,113 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37628.2
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuelLoyalty.Contracts", "src\FuelLoyalty.Contracts\FuelLoyalty.Contracts.csproj", "{8FD55356-3BEF-4389-B890-E9CC04A49DF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuelLoyalty.Sales.Api", "src\FuelLoyalty.Sales.Api\FuelLoyalty.Sales.Api.csproj", "{452B7B69-C7A2-406D-9692-E640874EC47C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuelLoyalty.Loyalty.Api", "src\FuelLoyalty.Loyalty.Api\FuelLoyalty.Loyalty.Api.csproj", "{3C965610-3444-4BCC-9A81-06861F2815FB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuelLoyalty.Gateway", "src\FuelLoyalty.Gateway\FuelLoyalty.Gateway.csproj", "{5BBA961C-6E1F-4512-A1AC-044C6D25C2EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuelLoyalty.PumpSimulator", "src\FuelLoyalty.PumpSimulator\FuelLoyalty.PumpSimulator.csproj", "{FE0C9EBB-5F2C-46FC-9A92-A4C6C482711E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuelLoyalty.SharedKernel", "src\FuelLoyalty.SharedKernel\FuelLoyalty.SharedKernel.csproj", "{BCB2593E-47A6-44B2-BAB9-75D8623F513A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuelLoyalty.ServiceDefaults", "src\FuelLoyalty.ServiceDefaults\FuelLoyalty.ServiceDefaults.csproj", "{A4B5F678-0303-4061-B7BB-7790219EEC31}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{44AA78EE-F90D-4516-B5D0-00F991B78290}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{CACA96C8-5ED2-4193-9959-3E5AC6AC7C3A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{217E0FD6-DF2D-465D-9321-66CCC3EE8EE9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{0EA3E453-F80C-460B-BF81-7654F5544FB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuelLoyalty.Portal", "src\FuelLoyalty.Portal\FuelLoyalty.Portal.csproj", "{F048FC61-6585-4FF6-B59E-011D0E300FDF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0F174124-E7AA-41EF-9A31-A965ECF45A7D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuelLoyalty.Loyalty.Tests", "tests\FuelLoyalty.Loyalty.Tests\FuelLoyalty.Loyalty.Tests.csproj", "{E86857B9-C4ED-40BB-85BF-88128807A686}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuelLoyalty.PumpSimulator.Tests", "tests\FuelLoyalty.PumpSimulator.Tests\FuelLoyalty.PumpSimulator.Tests.csproj", "{4A2514BF-96D8-436A-909F-B452B64BE7FB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8FD55356-3BEF-4389-B890-E9CC04A49DF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FD55356-3BEF-4389-B890-E9CC04A49DF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FD55356-3BEF-4389-B890-E9CC04A49DF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FD55356-3BEF-4389-B890-E9CC04A49DF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{452B7B69-C7A2-406D-9692-E640874EC47C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{452B7B69-C7A2-406D-9692-E640874EC47C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{452B7B69-C7A2-406D-9692-E640874EC47C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{452B7B69-C7A2-406D-9692-E640874EC47C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C965610-3444-4BCC-9A81-06861F2815FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C965610-3444-4BCC-9A81-06861F2815FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C965610-3444-4BCC-9A81-06861F2815FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C965610-3444-4BCC-9A81-06861F2815FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BBA961C-6E1F-4512-A1AC-044C6D25C2EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BBA961C-6E1F-4512-A1AC-044C6D25C2EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BBA961C-6E1F-4512-A1AC-044C6D25C2EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BBA961C-6E1F-4512-A1AC-044C6D25C2EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE0C9EBB-5F2C-46FC-9A92-A4C6C482711E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE0C9EBB-5F2C-46FC-9A92-A4C6C482711E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE0C9EBB-5F2C-46FC-9A92-A4C6C482711E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE0C9EBB-5F2C-46FC-9A92-A4C6C482711E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCB2593E-47A6-44B2-BAB9-75D8623F513A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCB2593E-47A6-44B2-BAB9-75D8623F513A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCB2593E-47A6-44B2-BAB9-75D8623F513A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCB2593E-47A6-44B2-BAB9-75D8623F513A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4B5F678-0303-4061-B7BB-7790219EEC31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4B5F678-0303-4061-B7BB-7790219EEC31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4B5F678-0303-4061-B7BB-7790219EEC31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4B5F678-0303-4061-B7BB-7790219EEC31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F048FC61-6585-4FF6-B59E-011D0E300FDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F048FC61-6585-4FF6-B59E-011D0E300FDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F048FC61-6585-4FF6-B59E-011D0E300FDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F048FC61-6585-4FF6-B59E-011D0E300FDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E86857B9-C4ED-40BB-85BF-88128807A686}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E86857B9-C4ED-40BB-85BF-88128807A686}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E86857B9-C4ED-40BB-85BF-88128807A686}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E86857B9-C4ED-40BB-85BF-88128807A686}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A2514BF-96D8-436A-909F-B452B64BE7FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A2514BF-96D8-436A-909F-B452B64BE7FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A2514BF-96D8-436A-909F-B452B64BE7FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A2514BF-96D8-436A-909F-B452B64BE7FB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8FD55356-3BEF-4389-B890-E9CC04A49DF1} = {CACA96C8-5ED2-4193-9959-3E5AC6AC7C3A}
+		{452B7B69-C7A2-406D-9692-E640874EC47C} = {44AA78EE-F90D-4516-B5D0-00F991B78290}
+		{3C965610-3444-4BCC-9A81-06861F2815FB} = {44AA78EE-F90D-4516-B5D0-00F991B78290}
+		{5BBA961C-6E1F-4512-A1AC-044C6D25C2EF} = {217E0FD6-DF2D-465D-9321-66CCC3EE8EE9}
+		{FE0C9EBB-5F2C-46FC-9A92-A4C6C482711E} = {0EA3E453-F80C-460B-BF81-7654F5544FB2}
+		{BCB2593E-47A6-44B2-BAB9-75D8623F513A} = {CACA96C8-5ED2-4193-9959-3E5AC6AC7C3A}
+		{A4B5F678-0303-4061-B7BB-7790219EEC31} = {CACA96C8-5ED2-4193-9959-3E5AC6AC7C3A}
+		{44AA78EE-F90D-4516-B5D0-00F991B78290} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{CACA96C8-5ED2-4193-9959-3E5AC6AC7C3A} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{217E0FD6-DF2D-465D-9321-66CCC3EE8EE9} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{0EA3E453-F80C-460B-BF81-7654F5544FB2} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{F048FC61-6585-4FF6-B59E-011D0E300FDF} = {0EA3E453-F80C-460B-BF81-7654F5544FB2}
+		{E86857B9-C4ED-40BB-85BF-88128807A686} = {0F174124-E7AA-41EF-9A31-A965ECF45A7D}
+		{4A2514BF-96D8-436A-909F-B452B64BE7FB} = {0F174124-E7AA-41EF-9A31-A965ECF45A7D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A1EE9503-B91A-486E-A23F-B5DD4F33A52A}
+	EndGlobalSection
+EndGlobal

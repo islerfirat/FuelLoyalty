@@ -1,0 +1,9 @@
+﻿@model Error
+
+<div class="alert alert-danger d-flex justify-content-between align-items-start gap-3" role="alert">
+    <div class="d-flex gap-2">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <span>@Model.Message</span>
+    </div>
+    <small class="font-mono text-danger-emphasis opacity-75">@Model.Code</small>
+</div>

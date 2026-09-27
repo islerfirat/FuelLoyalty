@@ -1,0 +1,65 @@
+﻿@model CreateCardFormModel
+@{
+    ViewData["Title"] = "Yeni Kart";
+    ViewData["Subtitle"] = "Sisteme yeni bir yakıt kartı ekleyin";
+}
+
+@section PageActions {
+    <a class="btn btn-outline-secondary" asp-action="Index">
+        <i class="bi bi-arrow-left me-1"></i> Kartlara dön
+    </a>
+}
+
+<div class="row">
+    <div class="col-lg-8 col-xl-6">
+        <div class="app-panel">
+            <div class="app-panel-header">
+                <h6 class="mb-0 fw-semibold">Kart Bilgileri</h6>
+            </div>
+            <div class="app-panel-body">
+                <form asp-action="Create" method="post" novalidate>
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="CardNumber" class="form-label"></label>
+                        <input asp-for="CardNumber" class="form-control font-mono" inputmode="numeric" placeholder="örnek: 1000200030004010" />
+                        <span asp-validation-for="CardNumber" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="HolderName" class="form-label"></label>
+                        <input asp-for="HolderName" class="form-control" placeholder="örnek: 41 KOC 410" />
+                        <span asp-validation-for="HolderName" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="AllowedFuelType" class="form-label"></label>
+                            <select asp-for="AllowedFuelType" asp-items="SelectListFactory.FuelTypes()" class="form-select"></select>
+                            <span asp-validation-for="AllowedFuelType" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="LimitType" class="form-label"></label>
+                            <select asp-for="LimitType" asp-items="SelectListFactory.LimitTypes()" class="form-select"></select>
+                            <span asp-validation-for="LimitType" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Balance" class="form-label"></label>
+                        <input asp-for="Balance" type="text" inputmode="decimal" class="form-control" placeholder="örnek: 5000 veya 250,50" />
+                        <div class="form-text">Tutar limitli kartta TL, litre limitli kartta litre olarak girilir.</div>
+                        <span asp-validation-for="Balance" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-lg me-1"></i> Kaydet
+                        </button>
+                        <a class="btn btn-light" asp-action="Index">İptal</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
